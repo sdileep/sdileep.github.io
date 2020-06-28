@@ -1,0 +1,160 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Maintain multi-environment, multi-region infrastructure on AWS using Terraform - LoveIt</title><meta name=Description content="This article describes how to structure a repository to maintain multi-environment, multi-region infrastructure in AWS using Terraform."><meta property="og:title" content="Maintain multi-environment, multi-region infrastructure on AWS using Terraform"><meta property="og:description" content="This article describes how to structure a repository to maintain multi-environment, multi-region infrastructure in AWS using Terraform."><meta property="og:type" content="article"><meta property="og:url" content="https://sdileep.github.io/terraform-setup-multi-environment-region/"><meta property="og:image" content="https://sdileep.github.io/terraform-setup-multi-environment-region/featured-image.jpg"><meta property="article:published_time" content="2020-01-02T15:52:40+08:00"><meta property="article:modified_time" content="2020-06-28T18:08:45+10:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://sdileep.github.io/terraform-setup-multi-environment-region/featured-image.jpg"><meta name=twitter:title content="Maintain multi-environment, multi-region infrastructure on AWS using Terraform"><meta name=twitter:description content="This article describes how to structure a repository to maintain multi-environment, multi-region infrastructure in AWS using Terraform."><meta name=application-name content="Dileep.dev"><meta name=apple-mobile-web-app-title content="Dileep.dev"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://sdileep.github.io/terraform-setup-multi-environment-region/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Maintain multi-environment, multi-region infrastructure on AWS using Terraform","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/sdileep.github.io\/terraform-setup-multi-environment-region\/"},"image":[{"@type":"ImageObject","url":"https:\/\/sdileep.github.io\/terraform-setup-multi-environment-region\/featured-image.jpg","width":1420,"height":708}],"genre":"posts","keywords":"Devops, Terraform, AWS","wordcount":893,"url":"https:\/\/sdileep.github.io\/terraform-setup-multi-environment-region\/","datePublished":"2020-01-02T15:52:40+08:00","dateModified":"2020-06-28T18:08:45+10:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"Dileep","logo":{"@type":"ImageObject","url":"https:\/\/sdileep.github.io\/images\/avatar.png","width":528,"height":560}},"author":{"@type":"Person","name":"Dileep"},"description":"This article describes how to structure a repository to maintain multi-environment, multi-region infrastructure in AWS using Terraform."}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=LoveIt><span class=header-title-pre><i class="far fa-smile-beam fa-fw"></i></span>Dileep.dev</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/tags/>Tags </a><a class=menu-item href=/about/>About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=LoveIt><span class=header-title-pre><i class="far fa-smile-beam fa-fw"></i></span>Dileep.dev</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/tags/>Tags</a><a class=menu-item href=/about/>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Maintain multi-environment, multi-region infrastructure on AWS using Terraform</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://sdileep.github.io title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>Dileep</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infrastructure/><i class="far fa-folder fa-fw"></i>Infrastructure</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-01-02>2020-01-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;893 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;5 minutes&nbsp;</div></div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/terraform-setup-multi-environment-region/featured-image.jpg data-srcset="/terraform-setup-multi-environment-region/featured-image.jpg, /terraform-setup-multi-environment-region/featured-image.jpg 1.5x, /terraform-setup-multi-environment-region/featured-image.jpg 2x" data-sizes=auto alt=/terraform-setup-multi-environment-region/featured-image.jpg title="This article describes how to structure a repository to maintain multi-environment, multi-region infrastructure in AWS using Terraform."></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#prerequisites>Prerequisites</a></li><li><a href=#what-do-we-have-to-play-with>What do we have to play with?</a><ul><li><a href=#module>Module</a></li><li><a href=#backend>Backend</a></li></ul></li><li><a href=#approach>Approach</a><ul><li><ul><li><a href=#source-layout>Source Layout</a></li><li><a href=#backend-configuration>Backend Configuration</a></li></ul></li></ul></li><li><a href=#repository>Repository</a></li><li><a href=#working-with-the-setup>Working with the setup</a></li></ul></nav></div></div><div class=content id=content><p>In one of my recent engagements, I had to work out an approach to manage AWS infrastructure across multiple regions, and for various environments, using Terraform.</p><p>As any sane copy-paste-tweak developer would, I did &ldquo;google&rdquo; for <em>inspiration</em> but ended up finding content that solved partially, either only for multi-environment or multi-region scenarios, or wasn&rsquo;t thought through (for example, no isolation of state between regions). For anyone in a similar need, here&rsquo;s something to build upon.</p><h2 id=prerequisites>Prerequisites</h2><p>An understanding of <a href=https://www.terraform.io/docs/configuration/index.html target=_blank rel="noopener noreffer">Terraform</a> and the concepts of <a href=https://www.terraform.io/docs/modules/usage.html target=_blank rel="noopener noreffer">Modules</a>, <a href=https://www.terraform.io/docs/backends/index.html target=_blank rel="noopener noreffer">Backends</a>, <a href=https://www.terraform.io/docs/state/workspaces.html target=_blank rel="noopener noreffer">Workspaces</a>, <a href=https://www.terraform.io/docs/state/remote.html target=_blank rel="noopener noreffer">Remote State</a> & <a href=https://www.terraform.io/docs/providers/aws/index.html target=_blank rel="noopener noreffer">AWS provider</a> would be required to make sense of the content in this post:</p><p>The following tools would be required to experiment with the provided sample code :</p><ul><li><a href=https://aws.amazon.com/cli target=_blank rel="noopener noreffer">AWS Command Line Interface</a> with access to AWS configured</li><li><a href=https://www.terraform.io/downloads.html target=_blank rel="noopener noreffer">Terraform</a></li></ul><h2 id=what-do-we-have-to-play-with>What do we have to play with?</h2><h3 id=module>Module</h3><p>Terraform&rsquo;s <code>module</code> system helps us create configurable infrastructure templates that could be reused across various environments (<em>product-a</em> deployed to <em>development/production</em>) or across various products (standard <em>s3/DynamoDB/SNS/etc</em> templates)</p><h3 id=backend>Backend</h3><p>Terraform&rsquo;s <code>backend</code> configuration for AWS <code>s3</code> remote state uses the following configuration variables to organize infrastructure state:</p><ul><li><code>bucket</code>: name of the <code>s3</code> bucket where state would be stored</li><li><code>workspace_key_prefix</code>: custom prefix on state file path</li><li><code>workspace</code>: name of the workspace</li><li><code>key</code>: state file name</li></ul><p>In <code>s3</code>, state file could then be located at <code>&lt;bucket>/&lt;workspace_key_prefix>/&lt;workspace>/&lt;key></code>. If we substitute <code>workspace</code> with <em>ap-southeast-1</em> or <em>ap-southeast-2</em>, if we substitute the variables <code>workspace_key_prefix</code> with <em>product-a</em> and <code>key</code> with <em>terraform.tfstate</em>, we end up with state files stored as:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>bucket
+    └──product-a
+        ├──ap-southeast-1
+        │   └── terraform.tfstate
+        └──ap-southeast-2
+            └── terraform.tfstate
+</code></pre></td></tr></table></div></div><p>This sets up grouping infrastructure states at a product/project level while establishing isolation between deployments to different regions while storing all those states conveniently in one place.</p><h2 id=approach>Approach</h2><p>Using the terraform module and backend systems, the infrastructure-as-source code repository layout & Terraform backend configuration snippet described in the section provides us with a way to:</p><ul><li>establish a structure in which common or a product/project&rsquo;s infrastructure is templatised for reuse across various enviroments</li><li>fine tune product/project&rsquo;s infrastructure at an environment level while even adding environment specific infrastructure for those non-ideal cases</li><li>maintain state at a region level so that we could have better isolation, canary deploy, etc.,</li></ul><h4 id=source-layout>Source Layout</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>├── environments
+│   ├── development
+│   |   ├── ap-southeast-1.tfvars
+│   |   ├── ap-southeast-2.tfvars
+│   |   ├── variables.tf
+│   |   ├── main.tf
+│   |   ├── provider.tf
+│   |   ├── terraform.tf
+│   |   └── terraform.tfvars
+│   ├── test
+│   |   ├── ap-southeast-1.tfvars
+│   |   ├── ap-southeast-2.tfvars
+│   |   └── ...
+│   ├── stage
+│   |   ├── ap-southeast-1.tfvars
+│   |   └── ...
+│   └── production
+│   |   └── ...
+└── modules
+    ├── aws-s3
+    │   ├── main.tf
+    │   ├── provider.tf
+    │   └── variables.tf
+    ├── product-a
+    │   ├── main.tf
+    │   ├── provider.tf
+    │   └── variables.tf
+    └── sub-system-x
+        ├── main.tf
+        ├── provider.tf
+        └── variables.tf
+</code></pre></td></tr></table></div></div><ul><li><code>environments</code>: folder to isolate various environment (<em>development</em>/<em>test</em>/<em>stage</em>/<em>production</em>) specific configuration. This also helps with flexibility of maintaining environment specific infrastructure for those, common, non-ideal scenarios.</li><li><code>modules</code>: folder to host reusable resource sets grouped at product/project or at a sub-system or common infrastructure components level. This folder doesn&rsquo;t have to exist in the same repository - it does here as an example and might very well serve the purpose of more than handful of usecases.</li></ul><p>Region specific configurations are managed through their respective <code>&lt;workpace>.tfvars</code> file. For example, <code>environments/development/ap-southeast-2.tfvars</code> file for <em>ap-southeast-2</em> region in <em>development</em> environment.</p><p>Also, <code>terraform.tfvars</code> file found inside <em>development</em>/<em>test</em>/<em>stage</em>/<em>production</em> folder under <em>environments</em> could be used to set common configuration for a given environment, across all regions.</p><h4 id=backend-configuration>Backend Configuration</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>terraform {
+  required_version = &#34;~&gt; 0.12.6&#34;
+
+  backend &#34;s3&#34; {
+    bucket               = &#34;terraform-state-bucket&#34;
+    dynamodb_table       = &#34;terraform-state-lock-table&#34;
+    encrypt              = true
+    key                  = &#34;terraform.tfstate&#34;
+    region               = &#34;ap-southeast-2&#34;
+    workspace_key_prefix = &#34;product-a&#34;
+  }
+}
+</code></pre></td></tr></table></div></div><p><em>Note</em> : The configuration described in this post and the included sample presume state bucket per environment. But, if the need is to store state from all environments in a common bucket, we could update <code>workspace_key_prefix</code> value to include environment in it. For example, with <em>product-a/development</em> or <em>product-a/production</em>, we end up with state under following path in <code>s3</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>bucket
+    └──product-a
+        ├──development
+        │   ├──ap-southeast-1
+        │   │   └── terraform.tfstate
+        │   └──ap-southeast-2
+        │       └── terraform.tfstate
+        └──production
+            ├──ap-southeast-1
+            │   └── terraform.tfstate
+            └──ap-southeast-2
+                └── terraform.tfstate
+</code></pre></td></tr></table></div></div><h2 id=repository>Repository</h2><p>Source for a sample setup could be found at <a href=https://www.terraform.io/docs/configuration/index.html target=_blank rel="noopener noreffer">here</a>.</p><h2 id=working-with-the-setup>Working with the setup</h2><p>Navigate to the environment folder, <code>development</code> for example, on the terminal.
+<em>Note:</em> Working configuration to access AWS environment is presumed</p><p><strong>Initialize terraform</strong></p><p>To get started, first initialize your local terraform state information</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh>terraform init
+</code></pre></td></tr></table></div></div><p><strong>List out the available workspaces</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh>terraform workspace list
+</code></pre></td></tr></table></div></div><p><strong>Create a new workspace (if it doesn&rsquo;t exist already)</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh><span class=c1>#terraform workspace new &lt;workspace-name&gt;</span>
+terraform workspace new ap-southeast-2
+</code></pre></td></tr></table></div></div><p><strong>Select a workspace</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh><span class=c1>#terraform workspace select &lt;workspace-name&gt;</span>
+terraform workspace <span class=k>select</span> ap-southeast-2
+</code></pre></td></tr></table></div></div><p><strong>Plan & apply changes</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh><span class=c1>#terraform plan -var-file=&lt;workspace-name&gt;.tfvars</span>
+<span class=c1>#terraform apply -var-file=&lt;workspace-name&gt;.tfvars</span>
+
+terraform plan -var-file<span class=o>=</span>ap-southeast-2.tfvars
+terraform apply -var-file<span class=o>=</span>ap-southeast-2.tfvars
+</code></pre></td></tr></table></div></div><p><strong>Repeat for other regions</strong></p><p>For <em>ap-southeast-1</em> region:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh>terraform workspace new ap-southeast-1
+terraform workspace <span class=k>select</span> ap-southeast-1
+terraform plan -var-file<span class=o>=</span>ap-southeast-1.tfvars
+terraform apply -var-file<span class=o>=</span>ap-southeast-1.tfvars
+</code></pre></td></tr></table></div></div><p>Hopefully, this note helps a mate out!</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2020-06-28&nbsp;<a class=git-hash href=https://github.com/sdileep/sdileep.github.io/commit/eccd7296aa973ca12d812fcd47b5a7e0fd37661a target=_blank title="commit by Dileep(sdileep@gmail.com) eccd7296aa973ca12d812fcd47b5a7e0fd37661a: First post (#2)">
+<i class="fas fa-hashtag fa-fw"></i>eccd729</a></span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/terraform-setup-multi-environment-region/index.md target=_blank>Read Markdown</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://sdileep.github.io/terraform-setup-multi-environment-region/ data-title="Maintain multi-environment, multi-region infrastructure on AWS using Terraform" data-via=sdileep data-hashtags=Devops,Terraform,AWS><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=https://sdileep.github.io/terraform-setup-multi-environment-region/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://sdileep.github.io/terraform-setup-multi-environment-region/ data-title="Maintain multi-environment, multi-region infrastructure on AWS using Terraform"><i class="fab fa-hacker-news fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://sdileep.github.io/terraform-setup-multi-environment-region/ data-title="Maintain multi-environment, multi-region infrastructure on AWS using Terraform"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/devops/>Devops</a>,&nbsp;<a href=/tags/terraform/>Terraform</a>,&nbsp;<a href=/tags/aws/>AWS</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav></div></div><div id=comments></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2020</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Dileep</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lunr@2.3.8/lunr.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
