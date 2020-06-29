@@ -7,7 +7,7 @@ As any sane copy-paste-tweak developer would, I did "google" for _inspiration_ b
 
 ## Prerequisites
 
-An understanding of [Terraform](https://www.terraform.io/docs/configuration/index.html) and the concepts of [Modules](https://www.terraform.io/docs/modules/usage.html), [Backends](https://www.terraform.io/docs/backends/index.html), [Workspaces](https://www.terraform.io/docs/state/workspaces.html), [Remote State](https://www.terraform.io/docs/state/remote.html) & [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) would be required to make sense of the content in this post:
+An understanding of [Terraform](https://www.terraform.io/docs/configuration/index.html) and the concepts of [modules](https://www.terraform.io/docs/modules/usage.html), [backends](https://www.terraform.io/docs/backends/index.html), [workspaces](https://www.terraform.io/docs/state/workspaces.html), [remote state](https://www.terraform.io/docs/state/remote.html) & [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) would be required to make sense of the content in this post:
 
 The following tools would be required to experiment with the provided sample code :
 
@@ -44,10 +44,10 @@ This sets up grouping infrastructure states at a product/project level while est
 
 ## Approach
 
-Using the terraform module and backend systems, the infrastructure-as-source code repository layout & Terraform backend configuration snippet described in the section provides us with a way to:
+Using the terraform module and backend systems, the repository layout & Terraform backend configuration snippet described provides us with a way to:
 
-- establish a structure in which common or a product/project's infrastructure is templatised for reuse across various enviroments
-- fine tune product/project's infrastructure at an environment level while even adding environment specific infrastructure for those non-ideal cases
+- establish a structure in which an application's infrastructure is templatised for reuse across various environments
+- fine tune application's infrastructure at an environment level while even adding environment specific infrastructure for those non-ideal cases
 - maintain state at a region level so that we could have better isolation, canary deploy, etc.,
 
 #### Source Layout
@@ -70,7 +70,7 @@ Using the terraform module and backend systems, the infrastructure-as-source cod
 │   |   ├── ap-southeast-1.tfvars
 │   |   └── ...
 │   └── production
-│   |   └── ...
+│       └── ...
 └── modules
     ├── aws-s3
     │   ├── main.tf
@@ -87,7 +87,7 @@ Using the terraform module and backend systems, the infrastructure-as-source cod
 ```
 
 - `environments`: folder to isolate various environment (_development_/_test_/_stage_/_production_) specific configuration. This also helps with flexibility of maintaining environment specific infrastructure for those, common, non-ideal scenarios.
-- `modules`: folder to host reusable resource sets grouped at product/project or at a sub-system or common infrastructure components level. This folder doesn't have to exist in the same repository - it does here as an example and might very well serve the purpose of more than handful of usecases.
+- `modules`: folder to host reusable resource sets grouped at product/project or at a sub-system or common infrastructure components level. This folder doesn't have to exist in the same repository - it does here as an example and might very well serve the purpose of more than handful of use cases.
 
 Region specific configurations are managed through their respective `<workpace>.tfvars` file. For example, `environments/development/ap-southeast-2.tfvars` file for _ap-southeast-2_ region in _development_ environment.
 
